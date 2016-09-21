@@ -19,23 +19,23 @@ $(function(){
 
     var ul = $('.flipster ul');
 	var serializer = new XMLSerializer();
-	
+
 	//Test goodreads callout
 	 /*$.ajax({
 		url: "https://www.goodreads.com/review/list?v=2&id=21709595&shelf=currently-reading&key=xtrmhqHu1ByJB77703Mlw",
 		type: 'GET',
-		success: function(data) { 
-		
-			//alert("Data Loaded: " + data) 
+		success: function(data) {
+
+			//alert("Data Loaded: " + data)
 			var xml = $.parseXML(data);
 			$xml = $(xml);
 			//$test = $xml.find('GoodreadsResponse');
 			//alert($(xml).text());
-			
+
 		},
 		dataType: "xml"
 	});*/
-	
+
 
 	  var xhttp = new XMLHttpRequest();
 	  xhttp.onreadystatechange = function() {
@@ -47,7 +47,7 @@ $(function(){
 	  };
 	  xhttp.open("GET", "https://www.goodreads.com/review/list?v=2&id=21709595&shelf=currently-reading&key=xtrmhqHu1ByJB77703Mlw", true);
 	  xhttp.send();
-	
+
 	function parseGoodreadsXML(xml) {
 		var xmlDoc = xml.responseXML;
 		//var xmlString = serializer.serializeToString(xmlDoc);
@@ -60,19 +60,22 @@ $(function(){
 		document.getElementById("testParagraph").innerHTML = stringVersion;
 		//$('#testParagraph').text(x.firstChild);
 	}
-	
-	
+
+
 	//Test rectangle drawing
 	   var canvas = document.getElementById('myCanvas');
-      var context = canvas.getContext('2d');
+     var context = canvas.getContext('2d');
+     //var rectSize =
 
-      context.beginPath();
-      context.rect(188, 50, 50, 200);
-      context.fillStyle = 'grey';
-      context.fill();
-      context.lineWidth = 7;
-      context.strokeStyle = 'black';
-      context.stroke();
+     for (var i = 0; i < 5; i++) {
+        context.beginPath();
+        context.rect((60 * i) + 15, 50, 50, 200);
+        context.fillStyle = 'grey';
+        context.fill();
+        context.lineWidth = 3;
+        context.strokeStyle = 'black';
+        context.stroke();
+    }
 	/*var c=document.getElementById("myCanvas");
 	var ctx=c.getContext("2d");
 	ctx.rect(20,20,150,100);
@@ -89,7 +92,7 @@ $(function(){
 
         rss.find('item').each(function(){
             var item = $(this);
-            
+
             var content = item.find('encoded').html().split('</a></div>')[0]+'</a></div>';
             var urlRegex = /(http|ftp|https):\/\/[\w\-_]+(\.[\w\-_]+)+([\w\-\.,@?^=%&amp;:/~\+#]*[\w\-\@?^=%&amp;/~\+#])?/g;
 
@@ -123,7 +126,7 @@ $(function(){
         $('.flipster').on('click', 'a', function (e) {
 
             e.preventDefault();
-            
+
             // Open URL with default browser.
 
             shell.openExternal(e.target.href);
