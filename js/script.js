@@ -16,53 +16,51 @@ $(function() {
     var ul = $('.flipster ul');
     var serializer = new XMLSerializer();
 
+    //call main
+    main();
 
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function() {
-        if (this.readyState == 4 && this.status == 200) {
-            /*var test = serializer.serializeToString(this.responseXML);
-            alert(test);//myFunction(this);*/
-            var pageLengths = ParseGoodreadsXML(this);
-            DrawBookSpines(pageLengths);
-        }
-    };
-    xhttp.open("GET", "https://www.goodreads.com/review/list?v=2&id=21709595&shelf=read&key=xtrmhqHu1ByJB77703Mlw", true);
-    xhttp.send();
+    function main() {
+      GoodReadsCallout('to-read', 'toReadCanvas');
+      GoodReadsCallout('currently-reading', 'currentlyReadingCanvas');
+      GoodReadsCallout('read', 'readCanvas');
 
-    //Get titles for the "currently reading" bookshelf
-    function ParseGoodreadsXML(xml) {
-        var xmlDoc = xml.responseXML;
-        //var xmlString = serializer.serializeToString(xmlDoc);
-        var x = xmlDoc.getElementsByTagName("title")[1];
-        var pageLengths = xmlDoc.getElementsByTagName("num_pages");
-         console.log(pageLengths);
-        var pageLengthsContainer = [];
-
-        for (var i = 0; i < pageLengths.length; i++) {
-
-            if (pageLengths[i].firstChild != null) {
-                var bookPageLength = pageLengths[i].firstChild.nodeValue;
-
-                pageLengthsContainer.push(bookPageLength);
-                console.log(bookPageLength);
-            }
-        }
-        //console.log(pages.firstChild);
-        //console.log(x.firstChild);
-        /*var stringVersion = serializer.serializeToString(x.firstChild);
-        pages = serializer.serializeToString(pages.firstChild);
-        pages = parseInt(pages);
-        document.getElementById("testParagraph").innerHTML = stringVersion + ', pages: ' + pages;*/
-        //$('#testParagraph').text(x.firstChild);
-        return pageLengthsContainer;
     }
 
+    function GoodReadsCallout(shelfParam, canvasId){
+      $.get('https://www.goodreads.com/review/list?v=2&id=21709595&shelf=' + shelfParam + '&key=xtrmhqHu1ByJB77703Mlw', function(response){
+          console.log('get response: ' + response);
+
+          var pageLengths = GetPageLengths(response);
+          var canvas = document.getElementById(canvasId);
+          var context = canvas.getContext('2d');
+
+          DrawShelf(canvas, context);
+          DrawBookSpines(pageLengths, canvas, context);
+          console.log('page lengths array: ' + pageLengths);
+
+      });
+    }
+
+    //Get page lengths for all books from response
+    function GetPageLengths(xmlResponse) {
+      var xml = $(xmlResponse);
+      var pageLengthsContainer = [];
+      console.log('xml: ' + xml);
+      xml.find('num_pages').each(function(){
+          var pageLength = $(this).text();
+
+          if (pageLength != '') {
+            pageLengthsContainer.push(pageLength);
+          }
+      });
+      return pageLengthsContainer;
+    }
 
     //Draw book spines on canvas
-    function DrawBookSpines(pageLengths) {
+    function DrawBookSpines(pageLengths, canvas, context) {
 
-        var canvas = document.getElementById('myCanvas');
-        var context = canvas.getContext('2d');
+        //var canvas = document.getElementById('myCanvas');
+        //var context = canvas.getContext('2d');
         var bookWidthTotal = 15;
 
         for (var i = 0; i < pageLengths.length; i++) {
@@ -71,7 +69,7 @@ $(function() {
             //Determine how big the book should be
             var bookWidth = pageLengths[i] * .1;
             var bookSpacing = (pageLengths[i] * .1) + 25;
-            var color = getRandomColor();
+            var color = GetRandomColor();
 
             context.beginPath();
             //context.rect((60 * i) + 15, 50, 35, 200);
@@ -83,12 +81,28 @@ $(function() {
             context.strokeStyle = 'black';
             context.stroke();
 
+
             bookWidthTotal = bookWidthTotal + bookWidth + 15;
-        
+
         }
     }
 
-    function getRandomColor() {
+    function DrawShelf(canvas, context) {
+
+      /*var canvas = document.getElementById('myCanvas');
+      var context = canvas.getContext('2d');*/
+
+      context.beginPath();
+      context.rect(10, 250, 1200, 10);
+      context.fillStyle = '#654321';
+      context.fill();
+      context.lineWidth = 3;
+      context.strokeStyle = '#381904';
+      context.stroke();
+
+    }
+
+    function GetRandomColor() {
         var letters = '0123456789ABCDEF';
         var color = '#';
         for (var i = 0; i < 6; i++ ) {
@@ -96,6 +110,7 @@ $(function() {
         }
         return color;
     }
+
     /*var c=document.getElementById("myCanvas");
     var ctx=c.getContext("2d");
     ctx.rect(20,20,150,100);
