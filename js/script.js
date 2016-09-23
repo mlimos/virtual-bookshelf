@@ -117,6 +117,24 @@ $(function() {
         return color;
     }
 
+    var eventClass = {
+      handleMouseHover = function(e) {
+        mouseX = parseInt(e.clientX - offsetX);
+        mouseY = parseInt(e.clientY - offsetY);
+
+        // Put your mousemove stuff here
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        for (var i = 0; i < rects.length; i++) {
+          if (rects[i].isPointInside(mouseX, mouseY)) {
+            rects[i].highlight();
+          }
+          else {
+            rects[i].redraw();
+          }
+        }
+      }
+    }
+
     /*var c=document.getElementById("myCanvas");
     var ctx=c.getContext("2d");
     ctx.rect(20,20,150,100);
