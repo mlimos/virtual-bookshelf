@@ -23,6 +23,11 @@ $(function() {
       GoodReadsCallout('to-read', 'toReadCanvas');
       GoodReadsCallout('currently-reading', 'currentlyReadingCanvas');
       GoodReadsCallout('read', 'readCanvas');
+      //console.log(ServiceClass.goodReadsCalloutResponse);
+      var test = GoodReadsCalloutTest('read');
+      console.log('test: ' + test);
+      /*if (console.log(ServiceClass.GoodReadsCalloutTest) != '');
+      console.log(ServiceClass.GoodReadsCalloutTest);*/
 
     }
 
@@ -70,6 +75,7 @@ $(function() {
             var bookWidth = pageLengths[i] * .1;
             var bookSpacing = (pageLengths[i] * .1) + 25;
             var color = GetRandomColor();
+            var cornerRadius = 50;
 
             context.beginPath();
             //context.rect((60 * i) + 15, 50, 35, 200);
