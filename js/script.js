@@ -22,8 +22,8 @@ $(function() {
     var canvasOffsetToRead = $("#toReadCanvas").offset();
     var canvasOffsetRead = $("#readCanvas").offset();
     var canvasOffsetCurrentlyReading = $("#currentlyReadingCanvas").offset();
-    var canvasTest = document.getElementById('toReadCanvas');
-    var contextTest = canvasTest.getContext('2d');
+    //var canvasTest = document.getElementById('toReadCanvas');
+    //var contextTest = canvasTest.getContext('2d');
    
 
 
@@ -33,6 +33,7 @@ $(function() {
         var offsetY = canvasOffsetToRead.top;
         var mouseX = parseInt(e.clientX - offsetX);
         var mouseY = parseInt(e.clientY - offsetY);
+        console.log('e.clientY: ' + e.clientY);
        
         // Put your mousemove stuff here
         //contextTest.clearRect(0, 0, canvasTest.width, canvasTest.height);
@@ -41,7 +42,8 @@ $(function() {
           //console.log('book: ' + i + ', ' + booksContainer[i].redraw);
           if (booksContainerToRead[i].isPointInside(mouseX, mouseY)) {
             console.log('in if');
-            console.log('book: ' + i + ', ' + booksContainerToRead[i].highlight);
+            //console.log('book: ' + i + ', ' + booksContainerToRead[i].highlight);
+            console.log('book #: ' + i);
             booksContainerToRead[i].highlight();
             //DrawShelf(canvasTest, contextTest);
           }
@@ -116,8 +118,11 @@ $(function() {
         GoodReadsCallout('to-read', 'toReadCanvas');
         //GoodReadsCallout('currently-reading', 'currentlyReadingCanvas');
         GoodReadsCallout('read', 'readCanvas');
+
         $("#toReadCanvas").mousemove(handleMouseHoverToRead);
-        $("#currentlyReadingCanvas").mousemove(handleMouseHoverRead);
+
+
+        $('#readCanvas').mousemove(handleMouseHoverRead);
         //$("#read").mousemove(handleMouseHoverCurrentlyReading);
      
 
@@ -132,6 +137,7 @@ $(function() {
 
           DrawShelf(canvasId);
           DrawBookSpines(pageLengths, canvasId);
+
           /*DrawBookSpines(pageLengths, canvas, context);
           console.log('page lengths array: ' + pageLengths);*/
 
@@ -155,7 +161,7 @@ $(function() {
 
     //Draw book spines on canvas
     function DrawBookSpines(pageLengths, canvasId) {
-
+        console.log('canvas id in draw book spines function: ' + canvasId);
         var canvas = document.getElementById(canvasId);
         var context = canvas.getContext('2d');
         //var canvas = document.getElementById('myCanvas');
@@ -170,14 +176,14 @@ $(function() {
             var bookSpacing = (pageLengths[i] * .1) + 25;
             var color = GetRandomColor();
           
-            if (canvasId = 'toReadCanvas') {
-                booksContainerToRead.push(new BookSpine("test", bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
+            if (canvasId == 'toReadCanvas') {
+                booksContainerToRead.push(new BookSpine(i, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
             }
-            else if (canvasId = 'currentlyReadingCanvas') {
-                booksContainerCurrentlyReading.push(new BookSpine("test", bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
+            else if (canvasId == 'currentlyReadingCanvas') {
+                booksContainerCurrentlyReading.push(new BookSpine(i, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
             }
-            else {
-                booksContainerRead.push(new BookSpine("test", bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
+            else if (canvasId == 'readCanvas'){
+                booksContainerRead.push(new BookSpine(i, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
             }
 
 
