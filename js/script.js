@@ -15,19 +15,111 @@ $(function() {
 
     var ul = $('.flipster ul');
     var serializer = new XMLSerializer();
+    var booksContainerToRead = [];
+    var booksContainerCurrentlyReading = [];
+    var booksContainerRead = [];
+    
+    var canvasOffsetToRead = $("#toReadCanvas").offset();
+    var canvasOffsetRead = $("#readCanvas").offset();
+    var canvasOffsetCurrentlyReading = $("#currentlyReadingCanvas").offset();
+    var canvasTest = document.getElementById('toReadCanvas');
+    var contextTest = canvasTest.getContext('2d');
+   
+
+
+    function handleMouseHoverToRead(e) {
+
+        var offsetX = canvasOffsetToRead.left;
+        var offsetY = canvasOffsetToRead.top;
+        var mouseX = parseInt(e.clientX - offsetX);
+        var mouseY = parseInt(e.clientY - offsetY);
+       
+        // Put your mousemove stuff here
+        //contextTest.clearRect(0, 0, canvasTest.width, canvasTest.height);
+        
+        for (var i = 0; i < booksContainerToRead.length; i++) {
+          //console.log('book: ' + i + ', ' + booksContainer[i].redraw);
+          if (booksContainerToRead[i].isPointInside(mouseX, mouseY)) {
+            console.log('in if');
+            console.log('book: ' + i + ', ' + booksContainerToRead[i].highlight);
+            booksContainerToRead[i].highlight();
+            //DrawShelf(canvasTest, contextTest);
+          }
+          else {
+            console.log('gets here');
+            //DrawShelf(canvasTest, contextTest);
+            booksContainerToRead[i].redraw();
+
+          }
+        }
+    }
+
+     function handleMouseHoverRead(e) {
+
+        var offsetX = canvasOffsetRead.left;
+        var offsetY = canvasOffsetRead.top;
+        var mouseX = parseInt(e.clientX - offsetX);
+        var mouseY = parseInt(e.clientY - offsetY);
+       
+        // Put your mousemove stuff here
+        
+        for (var i = 0; i < booksContainerRead.length; i++) {
+          //console.log('book: ' + i + ', ' + booksContainer[i].redraw);
+          if (booksContainerRead[i].isPointInside(mouseX, mouseY)) {
+            console.log('in if');
+            console.log('book: ' + i + ', ' + booksContainerRead[i].highlight);
+            booksContainerRead[i].highlight();
+            //DrawShelf(canvasTest, contextTest);
+          }
+          else {
+            console.log('gets here');
+            //DrawShelf(canvasTest, contextTest);
+            booksContainerRead[i].redraw();
+
+          }
+        }
+    }
+
+   /* function handleMouseHoverCurrentlyReading(e) {
+
+        var offsetX = canvasOffsetCurrentlyReading.left;
+        var offsetY = canvasOffsetCurrentlyReading.top;
+        var mouseX = parseInt(e.clientX - offsetX);
+        var mouseY = parseInt(e.clientY - offsetY);
+       
+        // Put your mousemove stuff here
+        
+        for (var i = 0; i < booksContainer.length; i++) {
+          console.log('book: ' + i);
+          if (booksContainer[i].isPointInside(mouseX, mouseY)) {
+            console.log('in if');
+            console.log('book: ' + i + ', ' + booksContainer[i].highlight);
+            booksContainer[i].highlight();
+            //DrawShelf(canvasTest, contextTest);
+          }
+          else {
+            console.log('gets here');
+            //DrawShelf(canvasTest, contextTest);
+            booksContainer[i].redraw();
+
+          }
+        }
+    }*/
+
+
+
 
     //call main
     main();
 
     function main() {
-      GoodReadsCallout('to-read', 'toReadCanvas');
-      GoodReadsCallout('currently-reading', 'currentlyReadingCanvas');
-      GoodReadsCallout('read', 'readCanvas');
-      //console.log(ServiceClass.goodReadsCalloutResponse);
-      var test = GoodReadsCalloutTest('read');
-      console.log('test: ' + test);
-      /*if (console.log(ServiceClass.GoodReadsCalloutTest) != '');
-      console.log(ServiceClass.GoodReadsCalloutTest);*/
+        GoodReadsCallout('to-read', 'toReadCanvas');
+        //GoodReadsCallout('currently-reading', 'currentlyReadingCanvas');
+        GoodReadsCallout('read', 'readCanvas');
+        $("#toReadCanvas").mousemove(handleMouseHoverToRead);
+        $("#currentlyReadingCanvas").mousemove(handleMouseHoverRead);
+        //$("#read").mousemove(handleMouseHoverCurrentlyReading);
+     
 
     }
 
@@ -36,12 +128,12 @@ $(function() {
           console.log('get response: ' + response);
 
           var pageLengths = GetPageLengths(response);
-          var canvas = document.getElementById(canvasId);
-          var context = canvas.getContext('2d');
+         
 
-          DrawShelf(canvas, context);
-          DrawBookSpines(pageLengths, canvas, context);
-          console.log('page lengths array: ' + pageLengths);
+          DrawShelf(canvasId);
+          DrawBookSpines(pageLengths, canvasId);
+          /*DrawBookSpines(pageLengths, canvas, context);
+          console.log('page lengths array: ' + pageLengths);*/
 
       });
     }
@@ -62,8 +154,10 @@ $(function() {
     }
 
     //Draw book spines on canvas
-    function DrawBookSpines(pageLengths, canvas, context) {
+    function DrawBookSpines(pageLengths, canvasId) {
 
+        var canvas = document.getElementById(canvasId);
+        var context = canvas.getContext('2d');
         //var canvas = document.getElementById('myCanvas');
         //var context = canvas.getContext('2d');
         var bookWidthTotal = 15;
@@ -75,17 +169,16 @@ $(function() {
             var bookWidth = pageLengths[i] * .1;
             var bookSpacing = (pageLengths[i] * .1) + 25;
             var color = GetRandomColor();
-            var cornerRadius = 50;
-
-            context.beginPath();
-            //context.rect((60 * i) + 15, 50, 35, 200);
-            //context.rect((bookWidth * i) + 15, 50, bookWidth, 200);
-            context.rect(bookWidthTotal, 50, bookWidth, 200);
-            context.fillStyle = color;
-            context.fill();
-            context.lineWidth = 3;
-            context.strokeStyle = 'black';
-            context.stroke();
+          
+            if (canvasId = 'toReadCanvas') {
+                booksContainerToRead.push(new BookSpine("test", bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
+            }
+            else if (canvasId = 'currentlyReadingCanvas') {
+                booksContainerCurrentlyReading.push(new BookSpine("test", bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
+            }
+            else {
+                booksContainerRead.push(new BookSpine("test", bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
+            }
 
 
             bookWidthTotal = bookWidthTotal + bookWidth + 15;
@@ -93,10 +186,10 @@ $(function() {
         }
     }
 
-    function DrawShelf(canvas, context) {
+    function DrawShelf(canvasId) {
 
-      /*var canvas = document.getElementById('myCanvas');
-      var context = canvas.getContext('2d');*/
+      var canvas = document.getElementById(canvasId);
+        var context = canvas.getContext('2d');
 
       context.beginPath();
       context.rect(10, 250, 1200, 10);
@@ -117,23 +210,7 @@ $(function() {
         return color;
     }
 
-    var eventClass = {
-      handleMouseHover = function(e) {
-        mouseX = parseInt(e.clientX - offsetX);
-        mouseY = parseInt(e.clientY - offsetY);
 
-        // Put your mousemove stuff here
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        for (var i = 0; i < rects.length; i++) {
-          if (rects[i].isPointInside(mouseX, mouseY)) {
-            rects[i].highlight();
-          }
-          else {
-            rects[i].redraw();
-          }
-        }
-      }
-    }
 
     /*var c=document.getElementById("myCanvas");
     var ctx=c.getContext("2d");
