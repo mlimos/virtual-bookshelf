@@ -18,113 +18,90 @@ $(function() {
     var booksContainerToRead = [];
     var booksContainerCurrentlyReading = [];
     var booksContainerRead = [];
-    
+    //var booksContainer = [];
+
     var canvasOffsetToRead = $("#toReadCanvas").offset();
     var canvasOffsetRead = $("#readCanvas").offset();
     var canvasOffsetCurrentlyReading = $("#currentlyReadingCanvas").offset();
     //var canvasTest = document.getElementById('toReadCanvas');
     //var contextTest = canvasTest.getContext('2d');
-   
 
+     function handleMouseHover(e) {
 
-    function handleMouseHoverToRead(e) {
+        var offsetXToRead = canvasOffsetToRead.left;
+        var offsetYToRead = canvasOffsetToRead.top;
+        var offsetXRead = canvasOffsetRead.left;
+        var offsetYRead = canvasOffsetRead.top;
+        var offsetXCurrentlyReading = canvasOffsetCurrentlyReading.left;
+        var offsetYCurrentlyReading = canvasOffsetCurrentlyReading.top;
+        var mouseXToRead = parseInt(e.pageX - offsetXToRead);
+        var mouseYToRead = parseInt(e.pageY - offsetYToRead);
+        var mouseXRead = parseInt(e.pageX - offsetXRead);
+        var mouseYRead = parseInt(e.pageY - offsetYRead);
+        var mouseXCurrentlyReading = parseInt(e.pageX - offsetXCurrentlyReading);
+        var mouseYCurrentlyReading = parseInt(e.pageY - offsetYCurrentlyReading);
 
-        var offsetX = canvasOffsetToRead.left;
-        var offsetY = canvasOffsetToRead.top;
-        var mouseX = parseInt(e.clientX - offsetX);
-        var mouseY = parseInt(e.clientY - offsetY);
-        console.log('e.clientY: ' + e.clientY);
-       
+        var offTest = false;
+
         // Put your mousemove stuff here
-        //contextTest.clearRect(0, 0, canvasTest.width, canvasTest.height);
-        
+
         for (var i = 0; i < booksContainerToRead.length; i++) {
           //console.log('book: ' + i + ', ' + booksContainer[i].redraw);
-          if (booksContainerToRead[i].isPointInside(mouseX, mouseY)) {
-            console.log('in if');
-            //console.log('book: ' + i + ', ' + booksContainerToRead[i].highlight);
-            console.log('book #: ' + i);
+          if (booksContainerToRead[i].isPointInside(mouseXToRead, mouseYToRead)) {
+            console.log('title:' + booksContainerToRead[i].id)
             booksContainerToRead[i].highlight();
-            //DrawShelf(canvasTest, contextTest);
+
+              //booksContainerToRead[i].drawText(e.pageX, e.pageY, 'test');
+
+
           }
           else {
-            console.log('gets here');
-            //DrawShelf(canvasTest, contextTest);
             booksContainerToRead[i].redraw();
 
           }
         }
-    }
 
-     function handleMouseHoverRead(e) {
-
-        var offsetX = canvasOffsetRead.left;
-        var offsetY = canvasOffsetRead.top;
-        var mouseX = parseInt(e.clientX - offsetX);
-        var mouseY = parseInt(e.clientY - offsetY);
-       
-        // Put your mousemove stuff here
-        
         for (var i = 0; i < booksContainerRead.length; i++) {
           //console.log('book: ' + i + ', ' + booksContainer[i].redraw);
-          if (booksContainerRead[i].isPointInside(mouseX, mouseY)) {
-            console.log('in if');
-            console.log('book: ' + i + ', ' + booksContainerRead[i].highlight);
+          if (booksContainerRead[i].isPointInside(mouseXRead, mouseYRead)) {
             booksContainerRead[i].highlight();
             //DrawShelf(canvasTest, contextTest);
           }
           else {
-            console.log('gets here');
             //DrawShelf(canvasTest, contextTest);
             booksContainerRead[i].redraw();
-
           }
         }
-    }
 
-   /* function handleMouseHoverCurrentlyReading(e) {
-
-        var offsetX = canvasOffsetCurrentlyReading.left;
-        var offsetY = canvasOffsetCurrentlyReading.top;
-        var mouseX = parseInt(e.clientX - offsetX);
-        var mouseY = parseInt(e.clientY - offsetY);
-       
-        // Put your mousemove stuff here
-        
-        for (var i = 0; i < booksContainer.length; i++) {
-          console.log('book: ' + i);
-          if (booksContainer[i].isPointInside(mouseX, mouseY)) {
-            console.log('in if');
-            console.log('book: ' + i + ', ' + booksContainer[i].highlight);
-            booksContainer[i].highlight();
+        for (var i = 0; i < booksContainerCurrentlyReading.length; i++) {
+          //console.log('book: ' + i + ', ' + booksContainer[i].redraw);
+          if (booksContainerCurrentlyReading[i].isPointInside(mouseXCurrentlyReading, mouseYCurrentlyReading)) {
+            booksContainerCurrentlyReading[i].highlight();
             //DrawShelf(canvasTest, contextTest);
           }
           else {
-            console.log('gets here');
             //DrawShelf(canvasTest, contextTest);
-            booksContainer[i].redraw();
-
+            booksContainerCurrentlyReading[i].redraw();
           }
         }
-    }*/
-
-
-
+    }
 
     //call main
     main();
 
     function main() {
         GoodReadsCallout('to-read', 'toReadCanvas');
-        //GoodReadsCallout('currently-reading', 'currentlyReadingCanvas');
+        GoodReadsCallout('currently-reading', 'currentlyReadingCanvas');
         GoodReadsCallout('read', 'readCanvas');
 
-        $("#toReadCanvas").mousemove(handleMouseHoverToRead);
+        $(document).mousemove(handleMouseHover);
+
+        /*$("#toReadCanvas").mousemove(handleMouseHoverToRead);
 
 
-        $('#readCanvas').mousemove(handleMouseHoverRead);
+        $('#readCanvas').mousemove(handleMouseHoverRead);*/
         //$("#read").mousemove(handleMouseHoverCurrentlyReading);
-     
+
 
     }
 
@@ -132,11 +109,10 @@ $(function() {
       $.get('https://www.goodreads.com/review/list?v=2&id=21709595&shelf=' + shelfParam + '&key=xtrmhqHu1ByJB77703Mlw', function(response){
           console.log('get response: ' + response);
 
-          var pageLengths = GetPageLengths(response);
-         
+          var bookInfo = GetBookInfo(response);
 
           DrawShelf(canvasId);
-          DrawBookSpines(pageLengths, canvasId);
+          DrawBookSpines(bookInfo, canvasId);
 
           /*DrawBookSpines(pageLengths, canvas, context);
           console.log('page lengths array: ' + pageLengths);*/
@@ -145,22 +121,48 @@ $(function() {
     }
 
     //Get page lengths for all books from response
-    function GetPageLengths(xmlResponse) {
+    function GetBookInfo(xmlResponse) {
+
+      var returnObject = {};
+      //var titleObject = {pageLength : ''};
+
       var xml = $(xmlResponse);
       var pageLengthsContainer = [];
-      console.log('xml: ' + xml);
+      var pageCounterLoop = 0;
+
+      //Getting book titles
+      xml.find('title').each(function() {
+        var title = $(this).text();
+
+        returnObject[title] = {};
+        //returnObject[title].title = title;
+
+      });
+
+      //Getting page lengths
       xml.find('num_pages').each(function(){
           var pageLength = $(this).text();
+          //pageLength = parseInt(pageLength);
 
-          if (pageLength != '') {
-            pageLengthsContainer.push(pageLength);
+          //Setting default for when xml returns an empty page length element
+          if (pageLength == '') {
+            pageLength = '250';
           }
+          pageLengthsContainer.push(pageLength);
+
       });
-      return pageLengthsContainer;
+
+      for (var title in returnObject) {
+        returnObject[title].pageLength = pageLengthsContainer[pageCounterLoop];
+        pageCounterLoop++;
+      }
+      //console.log('return object: ' + JSON.stringify(returnObject));
+
+      return returnObject;
     }
 
     //Draw book spines on canvas
-    function DrawBookSpines(pageLengths, canvasId) {
+    function DrawBookSpines(bookInfo, canvasId) {
         console.log('canvas id in draw book spines function: ' + canvasId);
         var canvas = document.getElementById(canvasId);
         var context = canvas.getContext('2d');
@@ -168,26 +170,24 @@ $(function() {
         //var context = canvas.getContext('2d');
         var bookWidthTotal = 15;
 
-        for (var i = 0; i < pageLengths.length; i++) {
+        for (var book in bookInfo) {
+          console.log(book);
 
+          var bookWidth = bookInfo[book].pageLength * .1;
+          var bookSpacing = (bookInfo[book].pageLength * .1) + 25;
+          var color = GetRandomColor();
 
-            //Determine how big the book should be
-            var bookWidth = pageLengths[i] * .1;
-            var bookSpacing = (pageLengths[i] * .1) + 25;
-            var color = GetRandomColor();
-          
-            if (canvasId == 'toReadCanvas') {
-                booksContainerToRead.push(new BookSpine(i, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
-            }
-            else if (canvasId == 'currentlyReadingCanvas') {
-                booksContainerCurrentlyReading.push(new BookSpine(i, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
-            }
-            else if (canvasId == 'readCanvas'){
-                booksContainerRead.push(new BookSpine(i, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
-            }
+          if (canvasId == 'toReadCanvas') {
+              booksContainerToRead.push(new BookSpine(book, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
+          }
+          else if (canvasId == 'currentlyReadingCanvas') {
+              booksContainerCurrentlyReading.push(new BookSpine(book, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
+          }
+          else if (canvasId == 'readCanvas'){
+              booksContainerRead.push(new BookSpine(book, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
+          }
 
-
-            bookWidthTotal = bookWidthTotal + bookWidth + 15;
+          bookWidthTotal = bookWidthTotal + bookWidth + 15;
 
         }
     }

@@ -45,6 +45,16 @@ var BookSpine = (function() {
     BookSpine.prototype.isPointInside = function(x, y) {
         return (x >= this.x && x <= this.x + this.width && y >= this.y && y <= this.y + this.height);
     }
+    BookSpine.prototype.drawText = function(x, y, text) {
+      this.context.fillStyle = "rgba(0, 0, 200, 0)";
+      //this.context.fillRect(x, y, 80, 25);
+      this.context.clearRect(x,y,0,0);
+      //this.context.clearRect(x, y, 80, 25);
+      this.context.font = 'bold 10px verdana';
+      this.context.fillStyle = 'blue';
+      this.context.fillText(text, x, y);
+      //this.context.clearRect();
+    }
 
 
     return BookSpine;
