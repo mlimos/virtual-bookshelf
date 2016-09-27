@@ -51,7 +51,7 @@ $(function() {
             console.log('title:' + booksContainerToRead[i].id)
             booksContainerToRead[i].highlight();
 
-              //booksContainerToRead[i].drawText(e.pageX, e.pageY, 'test');
+            booksContainerToRead[i].drawText(e.pageX, e.pageY, booksContainerToRead[i].id);
 
 
           }
