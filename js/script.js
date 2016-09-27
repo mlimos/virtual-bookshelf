@@ -28,6 +28,10 @@ $(function() {
 
      function handleMouseHover(e) {
 
+       var tipCanvas = document.getElementById("tip");
+       var tipCtx = tipCanvas.getContext("2d");
+       var hit = false;
+
         var offsetXToRead = canvasOffsetToRead.left;
         var offsetYToRead = canvasOffsetToRead.top;
         var offsetXRead = canvasOffsetRead.left;
@@ -48,16 +52,18 @@ $(function() {
         for (var i = 0; i < booksContainerToRead.length; i++) {
           //console.log('book: ' + i + ', ' + booksContainer[i].redraw);
           if (booksContainerToRead[i].isPointInside(mouseXToRead, mouseYToRead)) {
-            console.log('title:' + booksContainerToRead[i].id)
+            //console.log('title:' + booksContainerToRead[i].id)
             booksContainerToRead[i].highlight();
 
-            booksContainerToRead[i].drawText(e.pageX, e.pageY, booksContainerToRead[i].id);
-
-
+            booksContainerToRead[i].drawTitleTooltip(e.pageX, e.pageY, booksContainerToRead[i].id, tipCanvas, tipCtx);
+            hit = true
           }
           else {
             booksContainerToRead[i].redraw();
 
+          }
+          if (!hit) {
+            tipCanvas.style.left = "-1000px";
           }
         }
 
@@ -65,23 +71,36 @@ $(function() {
           //console.log('book: ' + i + ', ' + booksContainer[i].redraw);
           if (booksContainerRead[i].isPointInside(mouseXRead, mouseYRead)) {
             booksContainerRead[i].highlight();
+            //console.log('gets here')
+              booksContainerRead[i].drawTitleTooltip(e.pageX, e.pageY, booksContainerRead[i].id, tipCanvas, tipCtx);
             //DrawShelf(canvasTest, contextTest);
+            hit = true;
           }
           else {
             //DrawShelf(canvasTest, contextTest);
             booksContainerRead[i].redraw();
           }
+          if (!hit) {
+            tipCanvas.style.left = "-1000px";
+          }
         }
 
         for (var i = 0; i < booksContainerCurrentlyReading.length; i++) {
           //console.log('book: ' + i + ', ' + booksContainer[i].redraw);
+
           if (booksContainerCurrentlyReading[i].isPointInside(mouseXCurrentlyReading, mouseYCurrentlyReading)) {
             booksContainerCurrentlyReading[i].highlight();
             //DrawShelf(canvasTest, contextTest);
+
+            booksContainerCurrentlyReading[i].drawTitleTooltip(e.pageX, e.pageY, booksContainerCurrentlyReading[i].id, tipCanvas, tipCtx);
+            hit = true;
           }
           else {
             //DrawShelf(canvasTest, contextTest);
             booksContainerCurrentlyReading[i].redraw();
+          }
+          if (!hit) {
+            tipCanvas.style.left = "-1000px";
           }
         }
     }
@@ -96,26 +115,16 @@ $(function() {
 
         $(document).mousemove(handleMouseHover);
 
-        /*$("#toReadCanvas").mousemove(handleMouseHoverToRead);
-
-
-        $('#readCanvas').mousemove(handleMouseHoverRead);*/
-        //$("#read").mousemove(handleMouseHoverCurrentlyReading);
-
-
     }
 
     function GoodReadsCallout(shelfParam, canvasId){
       $.get('https://www.goodreads.com/review/list?v=2&id=21709595&shelf=' + shelfParam + '&key=xtrmhqHu1ByJB77703Mlw', function(response){
-          console.log('get response: ' + response);
+          //console.log('get response: ' + response);
 
           var bookInfo = GetBookInfo(response);
 
           DrawShelf(canvasId);
           DrawBookSpines(bookInfo, canvasId);
-
-          /*DrawBookSpines(pageLengths, canvas, context);
-          console.log('page lengths array: ' + pageLengths);*/
 
       });
     }
@@ -130,6 +139,8 @@ $(function() {
       var pageLengthsContainer = [];
       var pageCounterLoop = 0;
 
+      //console.log(xml.text());
+
       //Getting book titles
       xml.find('title').each(function() {
         var title = $(this).text();
@@ -138,6 +149,8 @@ $(function() {
         //returnObject[title].title = title;
 
       });
+
+      console.log('return object right now: ' + JSON.stringify(returnObject));
 
       //Getting page lengths
       xml.find('num_pages').each(function(){
@@ -152,7 +165,9 @@ $(function() {
 
       });
 
+      //Adding page lengths for each book object
       for (var title in returnObject) {
+
         returnObject[title].pageLength = pageLengthsContainer[pageCounterLoop];
         pageCounterLoop++;
       }
@@ -163,7 +178,7 @@ $(function() {
 
     //Draw book spines on canvas
     function DrawBookSpines(bookInfo, canvasId) {
-        console.log('canvas id in draw book spines function: ' + canvasId);
+    
         var canvas = document.getElementById(canvasId);
         var context = canvas.getContext('2d');
         //var canvas = document.getElementById('myCanvas');
@@ -171,7 +186,7 @@ $(function() {
         var bookWidthTotal = 15;
 
         for (var book in bookInfo) {
-          console.log(book);
+          //console.log(book);
 
           var bookWidth = bookInfo[book].pageLength * .1;
           var bookSpacing = (bookInfo[book].pageLength * .1) + 25;
@@ -184,6 +199,7 @@ $(function() {
               booksContainerCurrentlyReading.push(new BookSpine(book, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
           }
           else if (canvasId == 'readCanvas'){
+              console.log('book: ' + book);
               booksContainerRead.push(new BookSpine(book, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
           }
 
@@ -195,7 +211,7 @@ $(function() {
     function DrawShelf(canvasId) {
 
       var canvas = document.getElementById(canvasId);
-        var context = canvas.getContext('2d');
+      var context = canvas.getContext('2d');
 
       context.beginPath();
       context.rect(10, 250, 1200, 10);

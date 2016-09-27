@@ -27,6 +27,14 @@ a, a:visited, a:hover{
 	text-decoration: none;
 }
 
+#tip {
+    background-color:white;
+    border:1px solid blue;
+    position:absolute;
+    left:-200px;
+    top:100px;
+}
+
 
 /* The cover flow slider */
 

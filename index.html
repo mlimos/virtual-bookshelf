@@ -17,16 +17,18 @@
 <body>
   <p id="testParagraph"></p>
   <h1>CURRENTLY READING</h1>
-  <div id='currentlyReadingDiv'>
+  <div id='currentlyReadingWrapper'>
     <canvas id="currentlyReadingCanvas" width="1400" height="300">
   Your browser does not support the HTML5 canvas tag.</canvas>
-  </div>
+    </div>
     <h1>READ</h1>
-    <div>
+    <div id='readWrapper'>
     <canvas id="readCanvas" width="1400" height="300">
   Your browser does not support the HTML5 canvas tag.</canvas>
   </div>
 
+  <canvas id="tip" width=100, height=25>
+    Your browser does not support the HTML5 canvas tag.</canvas>
   <p class="stats"></p>
 
   <script>window.$ = window.jQuery = require('./js/jquery.min.js');</script>
