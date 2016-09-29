@@ -60,7 +60,7 @@ section.border button.active {
   color: #27496d;
 }
 
-/*ol {
+ol {
     counter-reset: li;
     list-style: none;
     *list-style: decimal;
@@ -88,9 +88,9 @@ section.border button.active {
     background: #eee;
 }
 
-.rounded-list a:hover:before{
+/*.rounded-list a:hover:before{
     transform: rotate(360deg);
-}
+}*/
 
 .rounded-list a:before{
     content: counter(li);
@@ -106,9 +106,9 @@ section.border button.active {
     border: .3em solid #fff;
     text-align: center;
     font-weight: bold;
-    border-radius: 2em;
+    border-radius: .3em;
     transition: all .3s ease-out;
-}*/
+}
 
 .shelf_section{
 	padding-top: 25px;

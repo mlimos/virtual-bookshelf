@@ -9,7 +9,9 @@ $(function() {
     // Electron's UI library. We will need it for later.
 
     var shell = require('shell');
-
+    var readBooks = '';
+    var toReadBooks = '';
+    var currentlyReadingBooks = '';
 
     // Fetch the recent posts on Tutorialzine.
 
@@ -18,7 +20,7 @@ $(function() {
     var booksContainerToRead = [];
     var booksContainerCurrentlyReading = [];
     var booksContainerRead = [];
-    //var booksContainer = [];
+    var booksContainer = [];
 
     var canvasOffsetToRead = $("#toReadCanvas").offset();
     var canvasOffsetRead = $("#readCanvas").offset();
@@ -27,7 +29,9 @@ $(function() {
     //var contextTest = canvasTest.getContext('2d');
 
     $('#toReadButton').click(function(){
-      alert('button clicked');
+      //alert('button clicked');
+      $('#bookList').toggle();
+
     });
 
      function handleMouseHover(e) {
@@ -49,12 +53,10 @@ $(function() {
         var mouseXCurrentlyReading = parseInt(e.pageX - offsetXCurrentlyReading);
         var mouseYCurrentlyReading = parseInt(e.pageY - offsetYCurrentlyReading);
 
-        var offTest = false;
-
         // Put your mousemove stuff here
 
         for (var i = 0; i < booksContainerToRead.length; i++) {
-          //console.log('book: ' + i + ', ' + booksContainer[i].redraw);
+          //console.log(booksContainerToRead[i]);
           if (booksContainerToRead[i].isPointInside(mouseXToRead, mouseYToRead)) {
             //console.log('title:' + booksContainerToRead[i].id)
             booksContainerToRead[i].highlight();
@@ -109,10 +111,46 @@ $(function() {
         }
     }
 
+    /*function TestFunction(e, booksContainer, canvasId) {
+
+      //Getting canvas offset
+      var tipCanvas = document.getElementById("tip");
+      var tipCtx = tipCanvas.getContext("2d");
+      var hit = false;
+      var canvasOffset = $(canvasId).offset();
+      //var canvasOffset = canvas.offset();
+
+      //Setting our offset and mouse pointer variables
+      var offsetX = canvasOffset.left;
+      var offsetY = canvasOffset.top;
+      var mouseX = parseInt(e.pageX - offsetX);
+      var mouseY = parseInt(e.pageY - offsetY);
+
+      for (var i = 0; i < booksContainer.length; i++) {
+        //console.log('book: ' + i + ', ' + booksContainer[i].redraw);
+        if (booksContainer[i].isPointInside(mouseX, mouseY)) {
+          //console.log('title:' + booksContainerToRead[i].id)
+          booksContainer[i].highlight();
+
+          booksContainer[i].drawTitleTooltip(e.pageX, e.pageY, booksContainer[i].id, tipCanvas, tipCtx);
+          hit = true
+        }
+        else {
+          booksContainer[i].redraw();
+
+        }
+        if (!hit) {
+          tipCanvas.style.left = "-1000px";
+        }
+      }
+    }*/
+
     //call main
     main();
 
     function main() {
+        //GoodReadsCalloutTest('to-read', 'toReadCanvas', DrawBookSpines());
+        //console.log('book data: ' + bookData.toReadBooks);
         GoodReadsCallout('to-read', 'toReadCanvas');
         GoodReadsCallout('currently-reading', 'currentlyReadingCanvas');
         GoodReadsCallout('read', 'readCanvas');
@@ -129,6 +167,7 @@ $(function() {
 
           DrawShelf(canvasId);
           DrawBookSpines(bookInfo, canvasId);
+          BuildBookTitleList(bookInfo);
 
       });
     }
@@ -195,7 +234,7 @@ $(function() {
           var bookWidth = bookInfo[book].pageLength * .1;
           var bookSpacing = (bookInfo[book].pageLength * .1) + 25;
           var color = GetRandomColor();
-
+          //booksContainer.push(new BookSpine(book, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
           if (canvasId == 'toReadCanvas') {
               booksContainerToRead.push(new BookSpine(book, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
           }
@@ -224,6 +263,18 @@ $(function() {
       context.lineWidth = 3;
       context.strokeStyle = '#381904';
       context.stroke();
+
+    }
+
+    function BuildBookTitleList(bookInfo) {
+
+      for (book in bookInfo) {
+        //var bookTitle = document.createElement('li');
+        //bookTitle.appendChild(document.createTextNode(book));
+        var testString =  '<li><a href=>' + book + '</a></li>';
+        //bookTitle.setAttribute('a', "#");
+        $("#bookList").append(testString);
+      }
 
     }
 
