@@ -30,10 +30,10 @@ a, a:visited, a:hover{
 button {
   display: inline-block;
   margin: 0 10px 0 0;
-  padding: 0px 20px;
+  padding: 0px 15px;
   font-size: 15px;
 	float:left;
-  font-family: "Bitter",serif;
+  font-family: "Helvetica",serif;
   line-height: 2;
   appearance: none;
   box-shadow: none;
@@ -124,20 +124,10 @@ section.border button.active {
   text-align:right;
 }
 
-.btn-glyphicon {
-    padding:8px;
-    background:#ffffff;
-    margin-right:4px;
-}
-.icon-btn {
-    padding: 1px 15px 3px 2px;
-    border-radius:50px;
-}
-
-
 #tip {
     background-color:white;
     border:3px solid #003366;
+		font-family: Helvetica;
     position:absolute;
     left:-200px;
     top:100px;

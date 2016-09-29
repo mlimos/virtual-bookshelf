@@ -47,18 +47,22 @@ var BookSpine = (function() {
     }
 
     BookSpine.prototype.drawTitleTooltip = function(x, y, title, tipCanvas, tipCtx) {
-      //tipCtx.font('10px Arial');
-      //Get length of text to dynamically set the tooltip canvas to the length of the text + buffer space     
+
+      //Get length of text to dynamically set the tooltip canvas to the length of the text + buffer space
+
       var titleLength = tipCtx.measureText(title).width;
       tipCanvas.width = titleLength + 10;
 
-      console.log(tipCanvas.width);
+      //console.log(tipCanvas.width);
 
       tipCanvas.style.left = (x + 10) + "px";
       tipCanvas.style.top = (y + 25) + "px";
 
       tipCtx.clearRect(0, 0, tipCanvas.width, tipCanvas.height);
-      tipCtx.fillText(title, 5, 15);
+      tipCtx.font = "15px Helvetica";
+      tipCtx.fillColor = 'black';
+
+      tipCtx.fillText(title, 5, 18);
 
     }
 
