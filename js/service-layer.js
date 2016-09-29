@@ -11,39 +11,45 @@ var bookData = {
     toReadBooks = jsonObject;
   }
 }*/
-function test(result) {
-  console.log('this worked');
+
+function getReadBooks() {
+  return bookData.readBooks;
 }
 
-GoodReadsCalloutTest('to-read', test);
+function getBooksToRead() {
+  return bookdata.toReadBooks;
+}
 
-function GoodReadsCalloutTest(shelfParam, canvasId, callback) {
+function getBooksCurrentlyReading() {
+  return bookData.currentlyReadingBooks;
+}
+
+function GoodReadsCallout(shelfParam, canvasId, callback1, callback2) {
     var xmlResponse = '';
     $.get('https://www.goodreads.com/review/list?v=2&id=21709595&shelf=' + shelfParam + '&key=xtrmhqHu1ByJB77703Mlw', function(response) {
         //console.log('get response: ' + response);
-        bookData.toReadBooks = GetBookInfoTest(response);
-        console.log(bookData.toReadBooks);
+        var bookInfo = GetBookInfo(response);
+        console.log(bookInfo);
 
-        callback(bookData.toReadBooks, canvasId);
-       /* var pageLengths = GetPageLengths(response);
-        var canvas = document.getElementById(canvasId);
-        var context = canvas.getContext('2d');
+        callback1(bookInfo, canvasId);
+        callback2(canvasId);
 
-        DrawShelf(canvas, context);
-        DrawBookSpines(pageLengths, canvas, context);
-        console.log('page lengths array: ' + pageLengths);*/
-
-        //ServiceClass.goodReadsCalloutResponse = response;
-
-        //console.log('test service class: ' + ServiceClass.goodReadsCalloutResponse);
-
-        //xmlResponse = response;
+        //Setting up our data structures for access later
+        if (shelfParam == 'to-read') {
+          bookData.toReadBooks = bookInfo;
+        }
+        else if (shelfParam == 'currently-reading') {
+          bookData.currentlyReadingBooks = bookInfo;
+        }
+        else if (shelfParam == 'read') {
+          bookData.readBooks = bookInfo;
+        }
 
     });
 }
 
 //Get page lengths for all books from response
-function GetBookInfoTest(xmlResponse) {
+function GetBookInfo(xmlResponse) {
 
   var returnObject = {};
   //var titleObject = {pageLength : ''};
@@ -86,13 +92,5 @@ function GetBookInfoTest(xmlResponse) {
   }
   //console.log('return object: ' + JSON.stringify(returnObject));
   return returnObject;
-  /*if (shelfParam == 'to-read') {
-    bookData.toReadBooks = returnObject;
-  }
-  else if (shelfParam == 'currently-reading') {
-    bookData.currentlyReadingBooks = returnObject;
-  }
-  else if (shelfParam == 'read') {
-    bookData.currentlyReadingBooks = returnObject;
-  }*/
+
 }

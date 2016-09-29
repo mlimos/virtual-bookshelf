@@ -149,17 +149,17 @@ $(function() {
     main();
 
     function main() {
-        //GoodReadsCalloutTest('to-read', 'toReadCanvas', DrawBookSpines());
-        //console.log('book data: ' + bookData.toReadBooks);
-        GoodReadsCallout('to-read', 'toReadCanvas');
-        GoodReadsCallout('currently-reading', 'currentlyReadingCanvas');
-        GoodReadsCallout('read', 'readCanvas');
+        GoodReadsCallout('to-read', 'toReadCanvas', DrawBookSpines, DrawShelf);
+        GoodReadsCallout('currently-reading', 'currentlyReadingCanvas', DrawBookSpines, DrawShelf);
+        GoodReadsCallout('read', 'readCanvas', DrawBookSpines, DrawShelf);
+
+        console.log('this works: ' + bookData.toReadBooks);
 
         $(document).mousemove(handleMouseHover);
 
     }
 
-    function GoodReadsCallout(shelfParam, canvasId){
+    /*function GoodReadsCallout(shelfParam, canvasId){
       $.get('https://www.goodreads.com/review/list?v=2&id=21709595&shelf=' + shelfParam + '&key=xtrmhqHu1ByJB77703Mlw', function(response){
           //console.log('get response: ' + response);
 
@@ -170,10 +170,10 @@ $(function() {
           BuildBookTitleList(bookInfo);
 
       });
-    }
+    }*/
 
     //Get page lengths for all books from response
-    function GetBookInfo(xmlResponse) {
+    /*function GetBookInfo(xmlResponse) {
 
       var returnObject = {};
       //var titleObject = {pageLength : ''};
@@ -217,7 +217,7 @@ $(function() {
       //console.log('return object: ' + JSON.stringify(returnObject));
 
       return returnObject;
-    }
+    }*/
 
     //Draw book spines on canvas
     function DrawBookSpines(bookInfo, canvasId) {
