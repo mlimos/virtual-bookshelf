@@ -26,6 +26,10 @@ $(function() {
     //var canvasTest = document.getElementById('toReadCanvas');
     //var contextTest = canvasTest.getContext('2d');
 
+    $('#toReadButton').click(function(){
+      alert('button clicked');
+    });
+
      function handleMouseHover(e) {
 
        var tipCanvas = document.getElementById("tip");
