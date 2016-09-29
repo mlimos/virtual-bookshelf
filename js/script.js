@@ -178,7 +178,7 @@ $(function() {
 
     //Draw book spines on canvas
     function DrawBookSpines(bookInfo, canvasId) {
-    
+
         var canvas = document.getElementById(canvasId);
         var context = canvas.getContext('2d');
         //var canvas = document.getElementById('myCanvas');
@@ -214,7 +214,7 @@ $(function() {
       var context = canvas.getContext('2d');
 
       context.beginPath();
-      context.rect(10, 250, 1200, 10);
+      context.rect(10, 250, 1150, 10);
       context.fillStyle = '#654321';
       context.fill();
       context.lineWidth = 3;
