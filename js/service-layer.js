@@ -24,7 +24,7 @@ function getBooksCurrentlyReading() {
   return bookData.currentlyReadingBooks;
 }
 
-function GoodReadsCallout(shelfParam, canvasId, callback1, callback2) {
+function GoodReadsCallout(shelfParam, canvasId, callback1, callback2, callback3) {
     var xmlResponse = '';
     $.get('https://www.goodreads.com/review/list?v=2&id=21709595&shelf=' + shelfParam + '&key=xtrmhqHu1ByJB77703Mlw', function(response) {
         //console.log('get response: ' + response);
@@ -37,12 +37,15 @@ function GoodReadsCallout(shelfParam, canvasId, callback1, callback2) {
         //Setting up our data structures for access later
         if (shelfParam == 'to-read') {
           bookData.toReadBooks = bookInfo;
+          callback3(bookInfo, "#toReadBookList");
         }
         else if (shelfParam == 'currently-reading') {
           bookData.currentlyReadingBooks = bookInfo;
+          callback3(bookInfo, "#currentlyReadingBookList");
         }
         else if (shelfParam == 'read') {
           bookData.readBooks = bookInfo;
+          callback3(bookInfo, "#readBookList");
         }
 
     });

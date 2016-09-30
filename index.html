@@ -38,10 +38,14 @@
        <button id="currentlyReadingButton">Currently Reading</button>
        <button id="readButton">Read</button>
    </section>
-   <section>
-      <ol id="bookList" class="rounded-list" style="display: none">
+   <div id="bookListWrapper">
+      <ol id="toReadBookList" class="rounded-list" style="display: none">
       </ol>
-    </section>
+      <ol id="currentlyReadingBookList" class="rounded-list" style="display: none">
+      </ol>
+      <ol id="readBookList" class="rounded-list" style="display: none">
+      </ol>
+    </div>
   </div>
 
   <script>window.$ = window.jQuery = require('./js/jquery.min.js');</script>

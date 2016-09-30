@@ -29,10 +29,39 @@ $(function() {
     //var contextTest = canvasTest.getContext('2d');
 
     $('#toReadButton').click(function(){
-      //alert('button clicked');
-      $('#bookList').toggle();
+
+      //ButtonHelper('currentlyReadingBookList', 'readBookList')
+      $('#toReadBookList').toggle();
+
 
     });
+
+    $('#currentlyReadingButton').click(function(){
+
+      //ButtonHelper('readBookList', 'toReadBookList')
+      $('#currentlyReadingBookList').toggle();
+
+    });
+
+    $('#readButton').click(function(){
+      //ButtonHelper('currentlyReadingBookList', 'toReadBookList')
+      $('#readBookList').toggle();
+
+    });
+
+    function ButtonHelper(bookListId1, bookListId2) {
+      //Parse to make buttonId1
+      //console.log(document.getElementById(bookListId1).style.display);
+      if (document.getElementById(bookListId1).style.display == 'block') {
+        var buttonId1 = bookListId1.replace('List', 'Button');
+        console.log('buttonId1: ' + buttonId1);
+        $(buttonId1).toggle();
+      }
+      if (document.getElementById(bookListId2).style.display == 'block') {
+        var buttonId2 = bookListId2.replace('List', 'Button');
+        $(buttonId2).toggle();
+      }
+    }
 
      function handleMouseHover(e) {
 
@@ -149,9 +178,9 @@ $(function() {
     main();
 
     function main() {
-        GoodReadsCallout('to-read', 'toReadCanvas', DrawBookSpines, DrawShelf);
-        GoodReadsCallout('currently-reading', 'currentlyReadingCanvas', DrawBookSpines, DrawShelf);
-        GoodReadsCallout('read', 'readCanvas', DrawBookSpines, DrawShelf);
+        GoodReadsCallout('to-read', 'toReadCanvas', DrawBookSpines, DrawShelf, BuildBookTitleList);
+        GoodReadsCallout('currently-reading', 'currentlyReadingCanvas', DrawBookSpines, DrawShelf, BuildBookTitleList);
+        GoodReadsCallout('read', 'readCanvas', DrawBookSpines, DrawShelf, BuildBookTitleList);
 
         console.log('this works: ' + bookData.toReadBooks);
 
@@ -266,14 +295,14 @@ $(function() {
 
     }
 
-    function BuildBookTitleList(bookInfo) {
+    function BuildBookTitleList(bookInfo, bookListHTMLId) {
 
       for (book in bookInfo) {
         //var bookTitle = document.createElement('li');
         //bookTitle.appendChild(document.createTextNode(book));
         var testString =  '<li><a href=>' + book + '</a></li>';
         //bookTitle.setAttribute('a', "#");
-        $("#bookList").append(testString);
+        $(bookListHTMLId).append(testString);
       }
 
     }
