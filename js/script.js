@@ -30,7 +30,13 @@ $(function() {
 
     $('#toReadButton').click(function(){
 
-      //ButtonHelper('currentlyReadingBookList', 'readBookList')
+      if (document.getElementById('toReadButton').className == 'inactive') {
+        document.getElementById('toReadButton').className = 'active';
+      }
+      else if (document.getElementById('toReadButton').className = 'active') {
+        document.getElementById('toReadButton').className = 'inactive';
+      }
+      ButtonHelper('currentlyReadingButton', 'readButton')
       $('#toReadBookList').toggle();
 
 
@@ -38,29 +44,47 @@ $(function() {
 
     $('#currentlyReadingButton').click(function(){
 
-      //ButtonHelper('readBookList', 'toReadBookList')
+      if (document.getElementById('currentlyReadingButton').className == 'inactive') {
+        document.getElementById('currentlyReadingButton').className = 'active';
+      }
+      else if (document.getElementById('currentlyReadingButton').className = 'active') {
+        document.getElementById('currentlyReadingButton').className = 'inactive';
+      }
+      ButtonHelper('readButton', 'toReadButton')
+      //document.getElementById('')
       $('#currentlyReadingBookList').toggle();
 
     });
 
     $('#readButton').click(function(){
-      //ButtonHelper('currentlyReadingBookList', 'toReadBookList')
+
+      if (document.getElementById('readButton').className == 'inactive') {
+        document.getElementById('readButton').className = 'active';
+      }
+      else if (document.getElementById('readButton').className == 'active') {
+        document.getElementById('readButton').className = 'inactive';
+      }
+      ButtonHelper('currentlyReadingButton', 'toReadButton')
       $('#readBookList').toggle();
 
     });
 
-    function ButtonHelper(bookListId1, bookListId2) {
-      //Parse to make buttonId1
-      //console.log(document.getElementById(bookListId1).style.display);
-      if (document.getElementById(bookListId1).style.display == 'block') {
-        var buttonId1 = bookListId1.replace('List', 'Button');
-        console.log('buttonId1: ' + buttonId1);
-        $(buttonId1).toggle();
+    function ButtonHelper(buttonId1, buttonId2) {
+
+      //Logic to determine if a button is currently active
+      if (document.getElementById(buttonId1).className == 'active') {
+        document.getElementById(buttonId1).className = 'inactive';
+
+        var bookListId = '#' + buttonId1.replace('Button', 'BookList')
+        $(bookListId).toggle();
       }
-      if (document.getElementById(bookListId2).style.display == 'block') {
-        var buttonId2 = bookListId2.replace('List', 'Button');
-        $(buttonId2).toggle();
+      else if (document.getElementById(buttonId2).className == 'active') {
+        document.getElementById(buttonId2).className = 'inactive';
+
+        var bookListId = '#' + buttonId2.replace('Button', 'BookList')
+        $(bookListId).toggle();
       }
+
     }
 
      function handleMouseHover(e) {
