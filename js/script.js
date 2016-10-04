@@ -351,11 +351,16 @@ $(function() {
         $(bookListHTMLId).append(bookLink);
         $('#' + bookInfo[book].id).hover(function() {
 
-          var x = booksContainerToRead[this.id].x;
-          var y = booksContainerToRead[this.id].y;
-          var context = booksContainerToRead[this.id].context;
-
-          booksContainerToRead[this.id].highlight();
+          if (bookListHTMLId == '#toReadBookList')
+            {
+              booksContainerToRead[this.id].highlight();
+          }
+          else if (bookListHTMLId == '#currentlyReadingBookList') {
+            booksContainerCurrentlyReading[this.id].highlight();
+          }
+          else if (bookListHTMLId == '#readBookList') {
+            booksContainerRead[this.id].highlight();
+          }
           //console.log(JSON.stringify(booksContainerToRead));
 
         });

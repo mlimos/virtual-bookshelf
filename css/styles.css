@@ -71,12 +71,17 @@ ul {
     text-shadow: 0 1px 0 rgba(255,255,255,.5);
 }
 
+.testClass.border {
+	border-color:#346392;
+}
+
 .rounded-list a{
     position: relative;
     display: block;
     padding: .4em .4em .4em 4em;
     *padding: .4em;
     margin: .5em 1em;
+		border: solid #003366;
     background: #ddd;
     color: #444;
     text-decoration: none;
