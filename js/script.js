@@ -17,10 +17,10 @@ $(function() {
 
     var ul = $('.flipster ul');
     var serializer = new XMLSerializer();
-    var booksContainerToRead = [];
-    var booksContainerCurrentlyReading = [];
-    var booksContainerRead = [];
-    var booksContainer = [];
+    var booksContainerToRead = {};
+    var booksContainerCurrentlyReading = {};
+    var booksContainerRead = {};
+    var booksContainer = {};
 
     var canvasOffsetToRead = $("#toReadCanvas").offset();
     var canvasOffsetRead = $("#readCanvas").offset();
@@ -69,6 +69,13 @@ $(function() {
 
     });
 
+    //When we hover over the list elements
+
+
+//    $('li').on('mouseover')
+
+
+
     function ButtonHelper(buttonId1, buttonId2) {
 
       //Logic to determine if a button is currently active
@@ -108,17 +115,19 @@ $(function() {
 
         // Put your mousemove stuff here
 
-        for (var i = 0; i < booksContainerToRead.length; i++) {
-          //console.log(booksContainerToRead[i]);
-          if (booksContainerToRead[i].isPointInside(mouseXToRead, mouseYToRead)) {
-            //console.log('title:' + booksContainerToRead[i].id)
-            booksContainerToRead[i].highlight();
+        //for (var i = 0; i < booksContainerToRead.length; i++) {
+        for (var book in booksContainerToRead) {
 
-            booksContainerToRead[i].drawTitleTooltip(e.pageX, e.pageY, booksContainerToRead[i].id, tipCanvas, tipCtx);
+          //console.log(booksContainerToRead[i]);
+          if (booksContainerToRead[book].isPointInside(mouseXToRead, mouseYToRead)) {
+            //console.log('title:' + booksContainerToRead[i].id)
+            booksContainerToRead[book].highlight();
+
+            booksContainerToRead[book].drawTitleTooltip(e.pageX, e.pageY, booksContainerToRead[book].id, tipCanvas, tipCtx);
             hit = true
           }
           else {
-            booksContainerToRead[i].redraw();
+            booksContainerToRead[book].redraw();
 
           }
           if (!hit) {
@@ -126,37 +135,39 @@ $(function() {
           }
         }
 
-        for (var i = 0; i < booksContainerRead.length; i++) {
+        //for (var i = 0; i < booksContainerRead.length; i++) {
+        for (var book in booksContainerRead) {
           //console.log('book: ' + i + ', ' + booksContainer[i].redraw);
-          if (booksContainerRead[i].isPointInside(mouseXRead, mouseYRead)) {
-            booksContainerRead[i].highlight();
+
+          if (booksContainerRead[book].isPointInside(mouseXRead, mouseYRead)) {
+            booksContainerRead[book].highlight();
             //console.log('gets here')
-              booksContainerRead[i].drawTitleTooltip(e.pageX, e.pageY, booksContainerRead[i].id, tipCanvas, tipCtx);
+              booksContainerRead[book].drawTitleTooltip(e.pageX, e.pageY, booksContainerRead[book].id, tipCanvas, tipCtx);
             //DrawShelf(canvasTest, contextTest);
             hit = true;
           }
           else {
             //DrawShelf(canvasTest, contextTest);
-            booksContainerRead[i].redraw();
+            booksContainerRead[book].redraw();
           }
           if (!hit) {
             tipCanvas.style.left = "-1000px";
           }
         }
 
-        for (var i = 0; i < booksContainerCurrentlyReading.length; i++) {
+        //for (var i = 0; i < booksContainerCurrentlyReading.length; i++) {
+        for (var book in booksContainerCurrentlyReading) {
           //console.log('book: ' + i + ', ' + booksContainer[i].redraw);
-
-          if (booksContainerCurrentlyReading[i].isPointInside(mouseXCurrentlyReading, mouseYCurrentlyReading)) {
-            booksContainerCurrentlyReading[i].highlight();
+          if (booksContainerCurrentlyReading[book].isPointInside(mouseXCurrentlyReading, mouseYCurrentlyReading)) {
+            booksContainerCurrentlyReading[book].highlight();
             //DrawShelf(canvasTest, contextTest);
 
-            booksContainerCurrentlyReading[i].drawTitleTooltip(e.pageX, e.pageY, booksContainerCurrentlyReading[i].id, tipCanvas, tipCtx);
+            booksContainerCurrentlyReading[book].drawTitleTooltip(e.pageX, e.pageY, booksContainerCurrentlyReading[book].id, tipCanvas, tipCtx);
             hit = true;
           }
           else {
             //DrawShelf(canvasTest, contextTest);
-            booksContainerCurrentlyReading[i].redraw();
+            booksContainerCurrentlyReading[book].redraw();
           }
           if (!hit) {
             tipCanvas.style.left = "-1000px";
@@ -206,9 +217,13 @@ $(function() {
         GoodReadsCallout('currently-reading', 'currentlyReadingCanvas', DrawBookSpines, DrawShelf, BuildBookTitleList);
         GoodReadsCallout('read', 'readCanvas', DrawBookSpines, DrawShelf, BuildBookTitleList);
 
-        console.log('this works: ' + bookData.toReadBooks);
+        //console.log('this works: ' + bookData.toReadBooks);
 
-        $(document).mousemove(handleMouseHover);
+        $('#toReadCanvas').mousemove(handleMouseHover);
+        $('#readCanvas').mousemove(handleMouseHover);
+        $('#currentlyReadingCanvas').mousemove(handleMouseHover);
+
+
 
     }
 
@@ -283,20 +298,24 @@ $(function() {
 
         for (var book in bookInfo) {
           //console.log(book);
+          var bookId = bookInfo[book].id;
 
           var bookWidth = bookInfo[book].pageLength * .1;
           var bookSpacing = (bookInfo[book].pageLength * .1) + 25;
           var color = GetRandomColor();
           //booksContainer.push(new BookSpine(book, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
           if (canvasId == 'toReadCanvas') {
-              booksContainerToRead.push(new BookSpine(book, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
+              booksContainerToRead[bookId] = new BookSpine(book, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context);
+              //booksContainerToRead.push(new BookSpine(book, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
           }
           else if (canvasId == 'currentlyReadingCanvas') {
-              booksContainerCurrentlyReading.push(new BookSpine(book, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
+            booksContainerCurrentlyReading[bookId] = new BookSpine(book, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context);
+              //booksContainerCurrentlyReading.push(new BookSpine(book, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
           }
           else if (canvasId == 'readCanvas'){
-              console.log('book: ' + book);
-              booksContainerRead.push(new BookSpine(book, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
+              //console.log('book: ' + book);
+              booksContainerRead[bookId] = new BookSpine(book, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context);
+              //booksContainerRead.push(new BookSpine(book, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
           }
 
           bookWidthTotal = bookWidthTotal + bookWidth + 15;
@@ -324,9 +343,22 @@ $(function() {
       for (book in bookInfo) {
         //var bookTitle = document.createElement('li');
         //bookTitle.appendChild(document.createTextNode(book));
-        var testString =  '<li><a href=>' + book + '</a></li>';
+        var linkId = book.replace(/\s/g, '');
+        console.log(linkId);
+        var bookLink =  '<li id="' + bookInfo[book].id + '" class="testClass"><a href=>' + book + '</a></li>';
+      //var bookLink =  '<li id="' + bookInfo[book].id + '" class="testClass">' + book + '</li>';
         //bookTitle.setAttribute('a', "#");
-        $(bookListHTMLId).append(testString);
+        $(bookListHTMLId).append(bookLink);
+        $('#' + bookInfo[book].id).hover(function() {
+
+          var x = booksContainerToRead[this.id].x;
+          var y = booksContainerToRead[this.id].y;
+          var context = booksContainerToRead[this.id].context;
+
+          booksContainerToRead[this.id].highlight();
+          //console.log(JSON.stringify(booksContainerToRead));
+
+        });
       }
 
     }

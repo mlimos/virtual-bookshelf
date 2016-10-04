@@ -60,11 +60,11 @@ section.border button.active {
   color: #27496d;
 }
 
-ol {
+ul {
     counter-reset: li;
     list-style: none;
     *list-style: decimal;
-    font: 15px 'trebuchet MS', 'lucida sans';
+    font: 15px 'Helvetica';
 		float:left;
     padding: 0;
     margin-bottom: 4em;
@@ -74,9 +74,9 @@ ol {
 .rounded-list a{
     position: relative;
     display: block;
-    padding: .4em .4em .4em 2em;
+    padding: .4em .4em .4em 4em;
     *padding: .4em;
-    margin: .5em 0;
+    margin: .5em 1em;
     background: #ddd;
     color: #444;
     text-decoration: none;
@@ -88,13 +88,9 @@ ol {
     background: #eee;
 }
 
-/*.rounded-list a:hover:before{
-    transform: rotate(360deg);
-}*/
-
 .rounded-list a:before{
-    content: counter(li);
-    counter-increment: li;
+  /*  content: counter(li);
+    counter-increment: li;*/
     position: absolute;
     left: -1.3em;
     top: 50%;

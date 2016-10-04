@@ -59,6 +59,7 @@ function GetBookInfo(xmlResponse) {
 
   var xml = $(xmlResponse);
   var pageLengthsContainer = [];
+  var idContainer = [];
   var pageCounterLoop = 0;
 
   //console.log(xml.text());
@@ -87,13 +88,22 @@ function GetBookInfo(xmlResponse) {
 
   });
 
+  xml.find('id').each(function() {
+      var bookId = $(this).text();
+
+      idContainer.push(bookId);
+
+  });
+
   //Adding page lengths for each book object
   for (var title in returnObject) {
 
     returnObject[title].pageLength = pageLengthsContainer[pageCounterLoop];
+    returnObject[title].id = idContainer[pageCounterLoop];
     pageCounterLoop++;
   }
   //console.log('return object: ' + JSON.stringify(returnObject));
+  console.log('return object: ' + JSON.stringify(returnObject));
   return returnObject;
 
 }

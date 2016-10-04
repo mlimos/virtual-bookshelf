@@ -24,6 +24,8 @@ var BookSpine = (function() {
         }
         //
     BookSpine.prototype.highlight = function(x, y, context) {
+            console.log('gets here');
+            console.log('this: ' + JSON.stringify(this));
             this.x = x || this.x;
             this.y = y || this.y;
             this.draw("orange", this.context);
@@ -31,6 +33,7 @@ var BookSpine = (function() {
         }
         //
     BookSpine.prototype.draw = function(stroke, context) {
+
             context.save();
             context.beginPath();
             context.fillStyle = this.fill;
