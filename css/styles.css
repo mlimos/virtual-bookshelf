@@ -64,15 +64,11 @@ ul {
     counter-reset: li;
     list-style: none;
     *list-style: decimal;
-    font: 15px 'Helvetica';
+    font: 15px 'Helvetica' 'black';
 		float:left;
     padding: 0;
     margin-bottom: 4em;
-    text-shadow: 0 1px 0 rgba(255,255,255,.5);
-}
-
-.testClass.border {
-	border-color:#346392;
+    /*text-shadow: 0 1px 0 rgba(255,255,255,.5);*/
 }
 
 .rounded-list a{

@@ -223,69 +223,7 @@ $(function() {
         $('#readCanvas').mousemove(handleMouseHover);
         $('#currentlyReadingCanvas').mousemove(handleMouseHover);
 
-
-
     }
-
-    /*function GoodReadsCallout(shelfParam, canvasId){
-      $.get('https://www.goodreads.com/review/list?v=2&id=21709595&shelf=' + shelfParam + '&key=xtrmhqHu1ByJB77703Mlw', function(response){
-          //console.log('get response: ' + response);
-
-          var bookInfo = GetBookInfo(response);
-
-          DrawShelf(canvasId);
-          DrawBookSpines(bookInfo, canvasId);
-          BuildBookTitleList(bookInfo);
-
-      });
-    }*/
-
-    //Get page lengths for all books from response
-    /*function GetBookInfo(xmlResponse) {
-
-      var returnObject = {};
-      //var titleObject = {pageLength : ''};
-
-      var xml = $(xmlResponse);
-      var pageLengthsContainer = [];
-      var pageCounterLoop = 0;
-
-      //console.log(xml.text());
-
-      //Getting book titles
-      xml.find('title').each(function() {
-        var title = $(this).text();
-
-        returnObject[title] = {};
-        //returnObject[title].title = title;
-
-      });
-
-      console.log('return object right now: ' + JSON.stringify(returnObject));
-
-      //Getting page lengths
-      xml.find('num_pages').each(function(){
-          var pageLength = $(this).text();
-          //pageLength = parseInt(pageLength);
-
-          //Setting default for when xml returns an empty page length element
-          if (pageLength == '') {
-            pageLength = '250';
-          }
-          pageLengthsContainer.push(pageLength);
-
-      });
-
-      //Adding page lengths for each book object
-      for (var title in returnObject) {
-
-        returnObject[title].pageLength = pageLengthsContainer[pageCounterLoop];
-        pageCounterLoop++;
-      }
-      //console.log('return object: ' + JSON.stringify(returnObject));
-
-      return returnObject;
-    }*/
 
     //Draw book spines on canvas
     function DrawBookSpines(bookInfo, canvasId) {
@@ -364,6 +302,7 @@ $(function() {
           //console.log(JSON.stringify(booksContainerToRead));
 
         });
+
       }
 
     }
