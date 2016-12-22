@@ -1,9 +1,7 @@
 var bookData = {
-
     toReadBooks : '',
     readBooks : '',
     currentlyReadingBooks : ''
-
 }
 
 /*function buildData(shelfParam, jsonObject) {
@@ -47,11 +45,10 @@ function GoodReadsCallout(shelfParam, canvasId, callback1, callback2, callback3)
           bookData.readBooks = bookInfo;
           callback3(bookInfo, "#readBookList");
         }
-
     });
 }
 
-//Get page lengths for all books from response
+//Get book data for all books from response
 function GetBookInfo(xmlResponse) {
 
   var returnObject = {};
@@ -60,6 +57,7 @@ function GetBookInfo(xmlResponse) {
   var xml = $(xmlResponse);
   var pageLengthsContainer = [];
   var idContainer = [];
+  var authorContainer = [];
   var pageCounterLoop = 0;
 
   //console.log(xml.text());
@@ -70,7 +68,6 @@ function GetBookInfo(xmlResponse) {
 
     returnObject[title] = {};
     //returnObject[title].title = title;
-
   });
 
   console.log('return object right now: ' + JSON.stringify(returnObject));
@@ -85,14 +82,20 @@ function GetBookInfo(xmlResponse) {
         pageLength = '250';
       }
       pageLengthsContainer.push(pageLength);
-
   });
 
+  //Getting book ID
   xml.find('id').each(function() {
       var bookId = $(this).text();
 
       idContainer.push(bookId);
+  });
 
+  //Getting author names
+  xml.find('name').each(function() {
+      var author = $(this).text();
+
+      authorContainer.push(author);
   });
 
   //Adding page lengths for each book object
@@ -100,6 +103,7 @@ function GetBookInfo(xmlResponse) {
 
     returnObject[title].pageLength = pageLengthsContainer[pageCounterLoop];
     returnObject[title].id = idContainer[pageCounterLoop];
+    returnObject[title].author = authorContainer[pageCounterLoop];
     pageCounterLoop++;
   }
   //console.log('return object: ' + JSON.stringify(returnObject));

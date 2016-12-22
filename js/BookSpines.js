@@ -3,10 +3,11 @@
 var BookSpine = (function() {
 
     // constructor
-    function BookSpine(id, x, y, width, height, fill, stroke, strokewidth, context) {
+    function BookSpine(id, author, x, y, width, height, fill, stroke, strokewidth, context) {
         this.x = x;
         this.y = y;
         this.id = id;
+        this.author = author;
         this.width = width;
         this.height = height;
         this.fill = fill || "gray";
@@ -50,14 +51,15 @@ var BookSpine = (function() {
         return (x >= this.x && x <= this.x + this.width && y >= this.y && y <= this.y + this.height);
     }
 
-    BookSpine.prototype.drawTitleTooltip = function(x, y, title, tipCanvas, tipCtx) {
+    BookSpine.prototype.drawTitleTooltip = function(x, y, title, author, tipCanvas, tipCtx) {
 
       //Get length of text to dynamically set the tooltip canvas to the length of the text + buffer space
 
       var titleLength = tipCtx.measureText(title).width;
-      tipCanvas.width = titleLength + 10;
-
-      //console.log(tipCanvas.width);
+      var authorLength = tipCtx.measureText(author + 'by ').width;
+      tipCanvas.width = titleLength > authorLength ? titleLength + 10 : authorLength + 10;
+      //tipCanvas.width = titleLength + 10;
+      tipCanvas.height = 35;
 
       tipCanvas.style.left = (x + 10) + "px";
       tipCanvas.style.top = (y + 25) + "px";
@@ -66,8 +68,10 @@ var BookSpine = (function() {
       tipCtx.font = "15px Helvetica";
       tipCtx.fillColor = 'black';
 
-      tipCtx.fillText(title, 5, 18);
-
+      tipCtx.textAlign = "center";
+      //tipCtx.fillText(title, 5, 18);
+      tipCtx.fillText(title, tipCanvas.width / 2, 18);
+      tipCtx.fillText('by: ' + author, tipCanvas.width / 2, 30);
     }
 
     return BookSpine;

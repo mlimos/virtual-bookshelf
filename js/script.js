@@ -123,7 +123,8 @@ $(function() {
             //console.log('title:' + booksContainerToRead[i].id)
             booksContainerToRead[book].highlight();
 
-            booksContainerToRead[book].drawTitleTooltip(e.pageX, e.pageY, booksContainerToRead[book].id, tipCanvas, tipCtx);
+            booksContainerToRead[book].drawTitleTooltip(e.pageX, e.pageY, booksContainerToRead[book].id, booksContainerToRead[book].author,
+               tipCanvas, tipCtx);
             hit = true
           }
           else {
@@ -142,7 +143,8 @@ $(function() {
           if (booksContainerRead[book].isPointInside(mouseXRead, mouseYRead)) {
             booksContainerRead[book].highlight();
             //console.log('gets here')
-              booksContainerRead[book].drawTitleTooltip(e.pageX, e.pageY, booksContainerRead[book].id, tipCanvas, tipCtx);
+              booksContainerRead[book].drawTitleTooltip(e.pageX, e.pageY, booksContainerRead[book].id, booksContainerRead[book].author,
+                 tipCanvas, tipCtx);
             //DrawShelf(canvasTest, contextTest);
             hit = true;
           }
@@ -162,7 +164,8 @@ $(function() {
             booksContainerCurrentlyReading[book].highlight();
             //DrawShelf(canvasTest, contextTest);
 
-            booksContainerCurrentlyReading[book].drawTitleTooltip(e.pageX, e.pageY, booksContainerCurrentlyReading[book].id, tipCanvas, tipCtx);
+            booksContainerCurrentlyReading[book].drawTitleTooltip(e.pageX, e.pageY, booksContainerCurrentlyReading[book].id,
+              booksContainerCurrentlyReading[book].author, tipCanvas, tipCtx);
             hit = true;
           }
           else {
@@ -237,22 +240,23 @@ $(function() {
         for (var book in bookInfo) {
           //console.log(book);
           var bookId = bookInfo[book].id;
+          var author = bookInfo[book].author;
 
           var bookWidth = bookInfo[book].pageLength * .1;
           var bookSpacing = (bookInfo[book].pageLength * .1) + 25;
           var color = GetRandomColor();
           //booksContainer.push(new BookSpine(book, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
           if (canvasId == 'toReadCanvas') {
-              booksContainerToRead[bookId] = new BookSpine(book, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context);
+              booksContainerToRead[bookId] = new BookSpine(book, author, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context);
               //booksContainerToRead.push(new BookSpine(book, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
           }
           else if (canvasId == 'currentlyReadingCanvas') {
-            booksContainerCurrentlyReading[bookId] = new BookSpine(book, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context);
+            booksContainerCurrentlyReading[bookId] = new BookSpine(book, author, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context);
               //booksContainerCurrentlyReading.push(new BookSpine(book, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
           }
           else if (canvasId == 'readCanvas'){
               //console.log('book: ' + book);
-              booksContainerRead[bookId] = new BookSpine(book, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context);
+              booksContainerRead[bookId] = new BookSpine(book, author, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context);
               //booksContainerRead.push(new BookSpine(book, bookWidthTotal, 50, bookWidth, 200, color, 'black', 3, context));
           }
 
@@ -283,14 +287,13 @@ $(function() {
         //bookTitle.appendChild(document.createTextNode(book));
         var linkId = book.replace(/\s/g, '');
         console.log(linkId);
-        var bookLink =  '<li id="' + bookInfo[book].id + '" class="testClass"><a href=>' + book + '</a></li>';
-      //var bookLink =  '<li id="' + bookInfo[book].id + '" class="testClass">' + book + '</li>';
-        //bookTitle.setAttribute('a', "#");
+        var bookLink =  '<li id="' + bookInfo[book].id + '" class="testClass"><a href=>' + book + '<br>' + 'by: ' +
+          bookInfo[book].author + '</br></a></li>';
+
         $(bookListHTMLId).append(bookLink);
         $('#' + bookInfo[book].id).hover(function() {
 
-          if (bookListHTMLId == '#toReadBookList')
-            {
+          if (bookListHTMLId == '#toReadBookList') {
               booksContainerToRead[this.id].highlight();
           }
           else if (bookListHTMLId == '#currentlyReadingBookList') {
